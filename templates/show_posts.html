@@ -1,0 +1,41 @@
+<html>
+<head>
+</head>
+<body>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+Here are pictures you can see {{user_name}}:
+
+<table>
+	<th>photoID</th>
+	<th>Post</th>
+
+{% for line in pictures %}
+	<tr>
+		<td>{{line.photoid}}</td>
+		<td>{{line.postingDate}}</td>
+		<td> <img src= {{line.filepath}}></td>
+	</tr>
+{% endfor %}
+</table>
+ 
+
+<br>
+<br>
+<a href="/select_blogger">Select another blogger</a>
+<br>
+<br>
+<a href="/home">Post a message</a>
+<br>
+<br>
+<a href="/logout">Logout</a>
+
+</body>
+
+
+</html>
