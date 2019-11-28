@@ -121,14 +121,14 @@ def select_blogger():
 
 @app.route('/show_posts', methods=["GET", "POST"])
 def show_posts():
-    poster = request.args['poster']
-    poster2 = [poster,poster,poster]
+    user = session['username']
+    user2 = [user,user,user]
     cursor = conn.cursor();
     query = "select photoid,postingDate,photoposter,filepath FROM photo WHERE ( %s IN (select username_follower from follow where username_followed = photoposter AND followStatus = 1) AND allFollowers=1) OR photoid IN (Select photoid from sharedwith as s1 where (memberusername = photoposter AND %s IN (select member_username from belongto as b2 where owner_username=s1.ownerUsername AND b2.groupName = s1.groupName))) OR photoposter = %s ORDER BY postingDate DESC"
-    cursor.execute(query, poster2)
+    cursor.execute(query, user2)
     data = cursor.fetchall()
     cursor.close()
-    return render_template('show_posts.html', poster_name=poster, pictures=data)
+    return render_template('show_posts.html', poster_name=user, pictures=data)
 
 @app.route('/logout')
 def logout():
