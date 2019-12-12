@@ -1,0 +1,32 @@
+{{msg}}</br>
+Here are your followers:
+{% for line in followers %}
+	</br>
+		{{line.username_follower}}
+
+		
+		
+		
+	</tr>
+{% endfor %}
+</br>
+Here are your unaccepted followers:
+
+<form action="/viewfollowers" method="POST">
+{% for line in requests %}
+	</br>
+		{{line.username_follower}}
+
+		</br>
+		  <input type="radio" name={{line.username_follower}} value="1"> Accepted 
+		<input type="radio" name={{line.username_follower}} value="0" checked> Denied
+		
+		
+		
+		
+	</tr>
+{% endfor %}
+</br>
+<input type="submit" value = "Save changes" />
+
+		</form>

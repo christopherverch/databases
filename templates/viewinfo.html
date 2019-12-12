@@ -1,0 +1,36 @@
+<html>
+<head>
+</head>
+<body>
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+	<h1>Here are the users tagged in photo with photoid {{data}}</h1> 
+	
+
+	{% for line in tagged %}
+	{{line.Username}}
+	</br>
+{% endfor %}
+<h1>These users liked photo with id {{data}}</h1> 
+	<table>
+	<th>Username</th>
+	<th>Rating</th>
+{% for line in likedBy %}
+
+	
+	<tr>
+	<td>{{line.Username}}</td>
+	
+	<td>{{line.rating}}</td>
+	</tr>
+	
+{% endfor %}
+</table>
+</body>
+
+
+</html>

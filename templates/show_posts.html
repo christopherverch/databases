@@ -13,15 +13,35 @@ Here are pictures you can see {{user_name}}:
 
 <table>
 	<th>photoID</th>
-	<th>Post</th>
+	<th>Timestamp</th>
+	<th>First name</th>
+	<th>Last name</th>
+	<th>Picture</th>
+	
+	<th></th><th></th>
 
 {% for line in pictures %}
 	<tr>
 		<td>{{line.photoid}}</td>
 		<td>{{line.postingDate}}</td>
+		<td>{{line.firstName}}</td>
+		<td>{{line.lastName}}</td>
+		<form action="/post" method="POST">
+		
 		<td> <img src= {{line.filepath}}></td>
+		<input type = "hidden" name = "photoidpost" value = {{line.photoid}} />
+		<td><input type="submit" value = "View tags and users who liked this photo" /></td>
+		</form>
+		<form action="/tag" method="POST">
+		<input type = "hidden" name = "photoidpost" value = {{line.photoid}} />
+
+		<td><input type="submit" value = "Tag someone" /></td>
+		</br>
+		</form></td>
+		
 	</tr>
 {% endfor %}
+
 </table>
  
 

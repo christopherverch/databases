@@ -1,0 +1,21 @@
+<!doctype html>
+{{posted}}
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <br>
+	  <input type="text" name = "caption" placeholder="Caption"/> </br>
+	  <input type="radio" name="allFollowers" value="1"> Show all followers<br>
+	  <input type="radio" name="allFollowers" value="0"> Don't show all followers<br>
+	  </br>
+	  {% for line in groups %}
+	  {{line.groupname}}, {{line.owner_username}} 
+	  </br>
+	  <input type="radio" name={{line.groupname}}{{line.owner_username}} value="1"> Share  
+	  <input type="radio" name={{line.groupname}}{{line.owner_username}} value="0" checked> Don't Share
+	  </br>
+	  {% endfor %}
+	  <input type=submit value=Upload>
+	  
+    </form>

@@ -1,0 +1,22 @@
+{{msg}}
+</br>
+Here are your tag requests:
+</br>
+<form action="/viewtag" method="POST">
+{% for line in unconfirmedtags %}
+	</br>
+		photo ID: {{line.photoid}}
+
+		</br>
+		<input type="radio" name={{line.photoid}} value="1"> Accepted 
+		<input type="radio" name={{line.photoid}} value="0" checked> Denied
+		
+		
+		
+		
+	</tr>
+{% endfor %}
+</br>
+<input type="submit" value = "Save changes" />
+
+		</form>
