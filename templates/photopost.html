@@ -10,7 +10,7 @@
 	  <input type="radio" name="allFollowers" value="0"> Don't show all followers<br>
 	  </br>
 	  {% for line in groups %}
-	  {{line.groupname}}, {{line.owner_username}} 
+	  {{line.groupname}}, owner: {{line.owner_username}} 
 	  </br>
 	  <input type="radio" name={{line.groupname}}{{line.owner_username}} value="1"> Share  
 	  <input type="radio" name={{line.groupname}}{{line.owner_username}} value="0" checked> Don't Share
@@ -19,3 +19,6 @@
 	  <input type=submit value=Upload>
 	  
     </form>
+	
+	<br>
+<a href="/home">Return to homepage</a>
