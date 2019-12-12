@@ -36,7 +36,7 @@ def photopost():
     print(request.method)
     user = session['username']
     cursor = conn.cursor();
-    query = 'SELECT member_username,groupname,owner_username FROM belongto WHERE member_username = %s'
+    query = 'SELECT groupname,owner_username FROM belongto WHERE member_username = %s'
     cursor.execute(query, (user))
     groups=cursor.fetchall()
     for line in groups:
@@ -248,8 +248,11 @@ def viewtag():
                 query = 'UPDATE taggedin SET tagstatus=1 WHERE username = %s AND photoid = %s'
                 cursor.execute(query, (username,line['photoid']))
                 conn.commit()
-    
-    return render_template('viewtag.html', unconfirmedtags=unconfirmedtags)
+                
+    query = 'SELECT photoid FROM taggedin WHERE username = %s AND tagstatus=0'
+    cursor.execute(query, (username))
+    unconfirmedtags=cursor.fetchall()
+    return render_template('viewtag.html', unconfirmedtags=unconfirmedtags, msg=msg)
 
 @app.route('/tag', methods=['GET', 'POST'])
 def tag():
@@ -286,22 +289,13 @@ def tagProccess():
     if(not bool(data)):
         msg = "User doesn't exist."
     if(bool(data)):
-        user2 = [user,user,user]
-        query = "select photoid,postingDate,photoposter,filepath,firstName,lastName FROM photo NATURAL JOIN person WHERE ( %s IN (select username_follower from follow where username_followed = photoposter AND followStatus = 1) AND allFollowers=1) OR photoid IN (Select photoid from sharedwith as s1 where (memberusername = photoposter AND %s IN (select member_username from belongto as b2 where owner_username=s1.ownerUsername AND b2.groupName = s1.groupName))) OR photoposter = %s GROUP BY photoID ORDER BY postingDate DESC "
+        user2 = [user,user,user,photoidpost]
+        query = "select photoid FROM photo NATURAL JOIN person WHERE (( %s IN (select username_follower from follow where username_followed = photoposter AND followStatus = 1) AND allFollowers=1) OR photoid IN (Select photoid from sharedwith as s1 where (memberusername = photoposter AND %s IN (select member_username from belongto as b2 where owner_username=s1.ownerUsername AND b2.groupName = s1.groupName))) OR photoposter = %s) AND photoid=%s GROUP BY photoID ORDER BY postingDate DESC "
         cursor.execute(query, user2)
         data = cursor.fetchall()
-        canseephoto=0
-        while(canseephoto==0 and bool(data)):
-            for line in data:
-                
-                print("gg")
-                if(str(line['photoid']) == str(photoidpost)):
-                    canseephoto=1
-                    break
-                canseephoto=-1
-        if(canseephoto==-1 or canseephoto==0):
+        if(not bool(data)):
             msg="User can't see this photo, can't tag this user."
-        if(canseephoto==1):
+        if(bool(data)):
             query = 'SELECT Username FROM taggedin WHERE username = %s AND photoid = %s'
             cursor.execute(query, (user,photoidpost))
             data = cursor.fetchall()
@@ -334,18 +328,7 @@ def post():
     print(taggedList)
     return render_template('viewinfo.html', data=photoidpost, tagged=taggedList, likedBy=likes)
 
-@app.route('/select_blogger')
-def select_blogger():
-    #check that user is logged in
-    #username = session['username']
-    #should throw exception if username not found
-    
-    cursor = conn.cursor();
-    query = 'SELECT DISTINCT username FROM blog'
-    cursor.execute(query)
-    data = cursor.fetchall()
-    cursor.close()
-    return render_template('select_blogger.html', user_list=data)
+
 
 @app.route('/show_posts', methods=["GET", "POST"])
 def show_posts():
